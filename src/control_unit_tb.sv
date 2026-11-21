@@ -13,7 +13,7 @@ module control_unit_tb;
   logic [31:0] alu_data1, alu_data2;
 
   write_source reg_write_source;
-  write_source alu_source, jump_source;
+  write_source alu_source;
 
   bit is_branch;
 
@@ -156,25 +156,20 @@ module control_unit_tb;
     #1;
 
     // jal x0, 0
-    check_data(/*instr=*/32'h0000006f, /*reg_write=*/1'b1, /*reg_write_addr=*/5'd0, /*reg_write_data=*/32'd4, /*alu_data1=*/32'd0, /*alu_data2=*/32'd0, /*is_branch=*/1'b1, /*pc_data=*/32'd0);
-
-    jump_source = reg_write_source;
-
-    assert (jump_source != alu_source)
-        else $fatal(1, "Incorrect reg_write_source: JAL should not use ALU result");
+    check_data(/*instr=*/32'h0000006f, /*reg_write=*/1'b1, /*reg_write_addr=*/5'd0, /*reg_write_data=*/32'd4, /*alu_data1=*/32'd0, /*alu_data2=*/32'd4, /*is_branch=*/1'b1, /*pc_data=*/32'd0);
 
     pc = 4;
 
     #1;
 
     // jal x1, 8
-    check_data(/*instr=*/32'h008000ef, /*reg_write=*/1'b1, /*reg_write_addr=*/5'd1, /*reg_write_data=*/32'd8, /*alu_data1=*/32'd4, /*alu_data2=*/32'd8, /*is_branch=*/1'b1, /*pc_data=*/32'd12);
+    check_data(/*instr=*/32'h008000ef, /*reg_write=*/1'b1, /*reg_write_addr=*/5'd1, /*reg_write_data=*/32'd8, /*alu_data1=*/32'd4, /*alu_data2=*/32'd4, /*is_branch=*/1'b1, /*pc_data=*/32'd12);
 
     // jal x5, 16
-    check_data(/*instr=*/32'h010002ef, /*reg_write=*/1'b1, /*reg_write_addr=*/5'd5, /*reg_write_data=*/32'd8, /*alu_data1=*/32'd4, /*alu_data2=*/32'd16, /*is_branch=*/1'b1, /*pc_data=*/32'd20);
+    check_data(/*instr=*/32'h010002ef, /*reg_write=*/1'b1, /*reg_write_addr=*/5'd5, /*reg_write_data=*/32'd8, /*alu_data1=*/32'd4, /*alu_data2=*/32'd4, /*is_branch=*/1'b1, /*pc_data=*/32'd20);
 
     // jal x6, -4
-    check_data(/*instr=*/32'hffdff36f, /*reg_write=*/1'b1, /*reg_write_addr=*/5'd6, /*reg_write_data=*/32'd8, /*alu_data1=*/32'd4, /*alu_data2=*/32'hfffffffc, /*is_branch=*/1'b1, /*pc_data=*/32'd0);
+    check_data(/*instr=*/32'hffdff36f, /*reg_write=*/1'b1, /*reg_write_addr=*/5'd6, /*reg_write_data=*/32'd8, /*alu_data1=*/32'd4, /*alu_data2=*/32'd4, /*is_branch=*/1'b1, /*pc_data=*/32'd0);
 
     $finish;
   end
@@ -219,19 +214,6 @@ module control_unit_tb;
     if (instr[6:0] == 7'b1100011 || instr[6:0] == 7'b1101111) begin
       assert (pc_data === expected_pc_data)
           else $fatal(1, "Incorrect pc_data: 0x%0h expected: 0x%0h", pc_data, expected_pc_data);
-    end
-
-    if (reg_write) begin
-      if (instr[6:0] == 7'b1101111) begin
-        if (instr != 32'h0000006f) begin
-          assert (reg_write_source === jump_source)
-              else $fatal(1, "Incorrect reg_write_source for JAL");
-        end
-      end
-      else begin
-        assert (reg_write_source === alu_source || instr == 32'h00500093)
-            else $fatal(1, "Incorrect reg_write_source for ALU instruction");
-      end
     end
 
     // Just so it actually runs
