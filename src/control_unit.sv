@@ -86,6 +86,22 @@ module control_unit(
             alu_data2 = instruction_fields.imm16;
           end
 
+          3'b101 : begin
+            // SRLI - Shift Right Logical Immediate
+            if (instruction_fields.funct7 == 7'b0000000) begin
+              // 0000000, shamt, rs1, 101, rd, 0b0010011, SRLI
+              // rd = rs1 >> shamt
+
+              reg_write      = 1'b1;
+              reg_write_addr = instruction_fields.rd;
+
+              arithmetic_type = LOGICAL_RIGHT;
+              reg_write_source = ALU;
+
+              alu_data1 = gpr[instruction_fields.rs1];
+              alu_data2 = instruction_fields.shamt;
+            end
+
           // ORI - OR Immediate
           3'b110 : begin
             // imm[11:0], rs1, 110, rd, 0b0010011, ORI
