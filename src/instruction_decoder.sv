@@ -22,7 +22,7 @@ module instruction_decoder(
     end
 
     // I-Types
-    else if (instruction_fields.opcode == `OP_ALU_IMM) begin
+    else if (instruction_fields.opcode == `OP_ALU_IMM || instruction_fields.opcode == `OP_ALU_JALR) begin
       // Sign extended to 16 from 12
       instruction_fields.shamt = data[24:20];
       instruction_fields.funct7 = data[31:25];

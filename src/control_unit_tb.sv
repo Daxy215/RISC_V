@@ -1,6 +1,7 @@
 
 module control_unit_tb;
   import types_pkg::*;
+  import alu_arithmetic_types::*;
   import control_unit_write_source::*;
 
   instruction_fields_t instruction_fields;
@@ -11,6 +12,9 @@ module control_unit_tb;
   logic        reg_write;
   logic [4:0]  reg_write_addr;
   logic [31:0] alu_data1, alu_data2;
+
+  arithmetic_types arithmetic_type;
+  logic [31:0] alu_result;
 
   write_source reg_write_source;
   write_source alu_source;
@@ -26,12 +30,20 @@ module control_unit_tb;
     .instruction_fields(instruction_fields)
   );
 
+  alu u_alu (
+    .data1          (alu_data1),
+    .data2          (alu_data2),
+    .arithmetic_type(arithmetic_type),
+    .result         (alu_result)
+  );
+
   control_unit u_control_unit (
     .instruction_fields(instruction_fields),
     .gpr               (gpr),
     .pc                (pc),
     .alu_data1         (alu_data1),
     .alu_data2         (alu_data2),
+    .arithmetic_type   (arithmetic_type),
     .reg_write         (reg_write),
     .reg_write_addr    (reg_write_addr),
     .reg_write_source  (reg_write_source),
@@ -171,6 +183,85 @@ module control_unit_tb;
     // jal x6, -4
     check_data(/*instr=*/32'hffdff36f, /*reg_write=*/1'b1, /*reg_write_addr=*/5'd6, /*reg_write_data=*/32'd8, /*alu_data1=*/32'd4, /*alu_data2=*/32'd4, /*is_branch=*/1'b1, /*pc_data=*/32'd0);
 
+    pc = 32'h00000020;
+    gpr[21] = 32'h00000064;
+
+    #1;
+
+    // jalr x20, x21, 8
+    check_data(/*instr=*/32'h008a8a67, /*reg_write=*/1'b1, /*reg_write_addr=*/5'd20, /*reg_write_data=*/32'h00000024, /*alu_data1=*/32'h00000020, /*alu_data2=*/32'd4, /*is_branch=*/1'b1, /*pc_data=*/32'h0000006c);
+
+    pc = 32'h00000020;
+    gpr[21] = 32'h00000064;
+
+    #1;
+
+    // jalr x20, x21, -8
+    check_data(/*instr=*/32'hff8a8a67, /*reg_write=*/1'b1, /*reg_write_addr=*/5'd20, /*reg_write_data=*/32'h00000024, /*alu_data1=*/32'h00000020, /*alu_data2=*/32'd4, /*is_branch=*/1'b1, /*pc_data=*/32'h0000005c);
+
+    pc = 32'h00000020;
+    gpr[21] = 32'h00000065;
+
+    #1;
+
+    // jalr x20, x21, 0
+    check_data(/*instr=*/32'h000a8a67, /*reg_write=*/1'b1, /*reg_write_addr=*/5'd20, /*reg_write_data=*/32'h00000024, /*alu_data1=*/32'h00000020, /*alu_data2=*/32'd4, /*is_branch=*/1'b1, /*pc_data=*/32'h00000064);
+
+    pc = 32'h00000020;
+    gpr[21] = 32'h00000064;
+
+    #1;
+
+    // jalr x20, x21, 1
+    check_data(/*instr=*/32'h001a8a67, /*reg_write=*/1'b1, /*reg_write_addr=*/5'd20, /*reg_write_data=*/32'h00000024, /*alu_data1=*/32'h00000020, /*alu_data2=*/32'd4, /*is_branch=*/1'b1, /*pc_data=*/32'h00000064);
+
+    pc = 32'h00000020;
+    gpr[21] = 32'h00000064;
+
+    #1;
+
+    // jalr x0, x21, 0
+    check_data(/*instr=*/32'h000a8067, /*reg_write=*/1'b1, /*reg_write_addr=*/5'd0, /*reg_write_data=*/32'h00000024, /*alu_data1=*/32'h00000020, /*alu_data2=*/32'd4, /*is_branch=*/1'b1, /*pc_data=*/32'h00000064);
+
+    pc = 32'h00000020;
+    gpr[21] = 32'h00000064;
+
+    #1;
+
+    // jalr x21, x21, 4
+    check_data(/*instr=*/32'h004a8ae7, /*reg_write=*/1'b1, /*reg_write_addr=*/5'd21, /*reg_write_data=*/32'h00000024, /*alu_data1=*/32'h00000020, /*alu_data2=*/32'd4, /*is_branch=*/1'b1, /*pc_data=*/32'h00000068);
+
+    pc = 32'h00000020;
+
+    #1;
+
+    // jalr x20, x0, 12
+    check_data(/*instr=*/32'h00c00a67, /*reg_write=*/1'b1, /*reg_write_addr=*/5'd20, /*reg_write_data=*/32'h00000024, /*alu_data1=*/32'h00000020, /*alu_data2=*/32'd4, /*is_branch=*/1'b1, /*pc_data=*/32'h0000000c);
+
+    pc = 32'h00000020;
+    gpr[21] = 32'h00001000;
+
+    #1;
+
+    // jalr x20, x21, -2048
+    check_data(/*instr=*/32'h800a8a67, /*reg_write=*/1'b1, /*reg_write_addr=*/5'd20, /*reg_write_data=*/32'h00000024, /*alu_data1=*/32'h00000020, /*alu_data2=*/32'd4, /*is_branch=*/1'b1, /*pc_data=*/32'h00000800);
+
+    pc = 32'h00000020;
+    gpr[21] = 32'h00001000;
+
+    #1;
+
+    // jalr x20, x21, 2047
+    check_data(/*instr=*/32'h7ffa8a67, /*reg_write=*/1'b1, /*reg_write_addr=*/5'd20, /*reg_write_data=*/32'h00000024, /*alu_data1=*/32'h00000020, /*alu_data2=*/32'd4, /*is_branch=*/1'b1, /*pc_data=*/32'h000017fe);
+
+    pc = 32'hfffffffc;
+    gpr[21] = 32'hfffffffc;
+
+    #1;
+
+    // jalr x20, x21, 4
+    check_data(/*instr=*/32'h004a8a67, /*reg_write=*/1'b1, /*reg_write_addr=*/5'd20, /*reg_write_data=*/32'h00000000, /*alu_data1=*/32'hfffffffc, /*alu_data2=*/32'd4, /*is_branch=*/1'b1, /*pc_data=*/32'h00000000);
+
     $finish;
   end
 
@@ -218,7 +309,7 @@ module control_unit_tb;
 
     // Just so it actually runs
     if (reg_write && reg_write_addr != 0)
-      gpr[reg_write_addr] = expected_reg_write_data;
+      gpr[reg_write_addr] = alu_result;
 
     $display("PASS: 0x%08h", instr);
 

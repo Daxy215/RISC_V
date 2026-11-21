@@ -424,6 +424,28 @@ module control_unit(
         endcase
       end
 
+      `OP_ALU_JALR : begin
+        // imm[11:0], rs1, 000, rd, 0b1100111, JALR
+        // rd = pc+4; pc = (rs1+imm) & ~1
+
+        if (instruction_fields.funct3 != 3'b000)
+          $fatal(1, "Unhandled JALR instruction funct3: 0b%0b", instruction_fields.funct3);
+
+        reg_write      = 1'b1;
+        reg_write_addr = instruction_fields.rd;
+
+        arithmetic_type = ADD;
+        reg_write_source = ALU;
+
+        //rd = pc + 4;
+        alu_data1 = pc;
+        alu_data2 = 4;
+
+        //pc = (rs1 + imm) & ~1;
+        is_branch = 1'b1;
+        pc_data = (gpr[instruction_fields.rs1] + instruction_fields.imm16) & 32'hfffffffe;
+      end
+
       `OP_ALU_JAL : begin
         // imm[20|10:1|11|19:12] rd 0b1101111 JAL
         // rd = pc+4; pc += imm
