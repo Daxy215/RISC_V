@@ -102,6 +102,25 @@ module control_unit(
               alu_data2 = instruction_fields.shamt;
             end
 
+            // SRAI - Shift Right Arithmetic Immediate
+            else if (instruction_fields.funct7 == 7'b0100000) begin
+              // 0100000, shamt, rs1, 101, rd, 0b0010011, SRAI
+              // rd = rs1 >>> shamt
+
+              reg_write      = 1'b1;
+              reg_write_addr = instruction_fields.rd;
+
+              arithmetic_type = ARITHMETIC_RIGHT;
+              reg_write_source = ALU;
+
+              alu_data1 = gpr[instruction_fields.rs1];
+              alu_data2 = instruction_fields.shamt;
+            end
+
+            else
+              $fatal(1, "Unhandled IMM shift instruction funct7: 0b%0b", instruction_fields.funct7);
+          end
+
           // ORI - OR Immediate
           3'b110 : begin
             // imm[11:0], rs1, 110, rd, 0b0010011, ORI
