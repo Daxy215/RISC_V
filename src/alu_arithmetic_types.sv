@@ -5,7 +5,7 @@ package alu_arithmetic_types;
     AND, OR, XOR,
     LOGICAL_LEFT, LOGICAL_RIGHT,
     ARITHMETIC_LEFT, ARITHMETIC_RIGHT,
-    EQUAL, LESS_THAN
+    EQUAL, LESS_THAN, SIGNED_LESS_THAN
   } arithmetic_types;
 
 endpackage

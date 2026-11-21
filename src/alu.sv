@@ -37,6 +37,7 @@ module alu(
       ARITHMETIC_RIGHT: begin result <= $signed(data1) >>> data2; end
       EQUAL:            begin result <= data1 ==  data2; end // Should I test for z and x too?
       LESS_THAN:        begin result <= data1 <   data2; end
+      SIGNED_LESS_THAN: begin result <= $signed(data1) < $signed(data2); end
       default: begin $fatal(1, "ALU unhandled arithmetic type of %0s", arithmetic_type.name()); end
     endcase
   end

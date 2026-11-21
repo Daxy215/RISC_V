@@ -66,7 +66,49 @@ module alu_tb;
     check_results(5, 3, LESS_THAN, 0);
 
     // -3 < 5 = 1
-    //check_results(32'hFFFFFFFD, 5, SIGNED_LESS_THAN, 1);
+    check_results(32'hFFFFFFFD, 5, SIGNED_LESS_THAN, 1);
+
+    // 5 < -3 = 0
+    check_results(5, 32'hFFFFFFFD, SIGNED_LESS_THAN, 0);
+
+    // 3 < 5 = 1
+    check_results(3, 5, SIGNED_LESS_THAN, 1);
+
+    // 5 < 3 = 0
+    check_results(5, 3, SIGNED_LESS_THAN, 0);
+
+    // 5 < 5 = 0
+    check_results(5, 5, SIGNED_LESS_THAN, 0);
+
+    // -5 < -3 = 1
+    check_results(32'hFFFFFFFB, 32'hFFFFFFFD, SIGNED_LESS_THAN, 1);
+
+    // -3 < -5 = 0
+    check_results(32'hFFFFFFFD, 32'hFFFFFFFB, SIGNED_LESS_THAN, 0);
+
+    // -3 < -3 = 0
+    check_results(32'hFFFFFFFD, 32'hFFFFFFFD, SIGNED_LESS_THAN, 0);
+
+    // 0 < 0 = 0
+    check_results(0, 0, SIGNED_LESS_THAN, 0);
+
+    // -1 < 0 = 1
+    check_results(32'hFFFFFFFF, 0, SIGNED_LESS_THAN, 1);
+
+    // 0 < -1 = 0
+    check_results(0, 32'hFFFFFFFF, SIGNED_LESS_THAN, 0);
+
+    // -2147483648 < 2147483647 = 1
+    check_results(32'h80000000, 32'h7FFFFFFF, SIGNED_LESS_THAN, 1);
+
+    // 2147483647 < -2147483648 = 0
+    check_results(32'h7FFFFFFF, 32'h80000000, SIGNED_LESS_THAN, 0);
+
+    // -2147483648 < -2147483648 = 0
+    check_results(32'h80000000, 32'h80000000, SIGNED_LESS_THAN, 0);
+
+    // 2147483647 < 2147483647 = 0
+    check_results(32'h7FFFFFFF, 32'h7FFFFFFF, SIGNED_LESS_THAN, 0);
 
     // 3 < 5 = 1
     //check_results(3, 5, UNSIGNED_LESS_THAN, 1);
