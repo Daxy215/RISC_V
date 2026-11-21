@@ -53,6 +53,24 @@ module control_unit(
             alu_data2 = instruction_fields.imm16;
           end
 
+          // SLLI - Shift Left Logical Immediate
+          3'b001 : begin
+            // 0000000, shamt, rs1, 001, rd, 0b0010011, SLLI
+            // rd = rs1 << shamt
+
+            if (instruction_fields.funct7 != 7'b0000000)
+              $fatal(1, "Unhandled SLLI instruction funct7: 0b%0b", instruction_fields.funct7);
+
+            reg_write      = 1'b1;
+            reg_write_addr = instruction_fields.rd;
+
+            arithmetic_type = LOGICAL_LEFT;
+            reg_write_source = ALU;
+
+            alu_data1 = gpr[instruction_fields.rs1];
+            alu_data2 = instruction_fields.shamt;
+          end
+
           // XORI - XOR Immediate
           3'b100 : begin
             // imm[11:0], rs1, 100, rd, 0b0010011, ADDI
