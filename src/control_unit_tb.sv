@@ -124,44 +124,44 @@ module control_unit_tb;
     #1;
 
     // beq x1, x2, 8 (not taken)
-    check_data(/*instr=*/32'h00208463, /*reg_write=*/1'b0, /*reg_write_addr=*/5'd0, /*reg_write_data=*/32'd0, /*alu_data1=*/32'd5, /*alu_data2=*/32'd8, /*is_branch=*/1'b0, /*pc_data=*/32'd8);
+    check_data(/*instr=*/32'h00208463, /*reg_write=*/1'b0, /*reg_write_addr=*/5'd0, /*reg_write_data=*/32'd0, /*alu_data1=*/32'd0, /*alu_data2=*/32'd0, /*is_branch=*/1'b0, /*pc_data=*/32'd8);
 
     // bne x1, x2, 8 (taken)
-    check_data(/*instr=*/32'h00209463, /*reg_write=*/1'b0, /*reg_write_addr=*/5'd0, /*reg_write_data=*/32'd0, /*alu_data1=*/32'd5, /*alu_data2=*/32'd8, /*is_branch=*/1'b1, /*pc_data=*/32'd8);
+    check_data(/*instr=*/32'h00209463, /*reg_write=*/1'b0, /*reg_write_addr=*/5'd0, /*reg_write_data=*/32'd0, /*alu_data1=*/32'd0, /*alu_data2=*/32'd0, /*is_branch=*/1'b1, /*pc_data=*/32'd8);
 
     // blt x1, x2, 8 (taken)
-    check_data(/*instr=*/32'h0020c463, /*reg_write=*/1'b0, /*reg_write_addr=*/5'd0, /*reg_write_data=*/32'd0, /*alu_data1=*/32'd5, /*alu_data2=*/32'd8, /*is_branch=*/1'b1, /*pc_data=*/32'd8);
+    check_data(/*instr=*/32'h0020c463, /*reg_write=*/1'b0, /*reg_write_addr=*/5'd0, /*reg_write_data=*/32'd0, /*alu_data1=*/32'd0, /*alu_data2=*/32'd0, /*is_branch=*/1'b1, /*pc_data=*/32'd8);
 
     // bge x1, x2, 8 (not taken)
-    check_data(/*instr=*/32'h0020d463, /*reg_write=*/1'b0, /*reg_write_addr=*/5'd0, /*reg_write_data=*/32'd0, /*alu_data1=*/32'd5, /*alu_data2=*/32'd8, /*is_branch=*/1'b0, /*pc_data=*/32'd8);
+    check_data(/*instr=*/32'h0020d463, /*reg_write=*/1'b0, /*reg_write_addr=*/5'd0, /*reg_write_data=*/32'd0, /*alu_data1=*/32'd0, /*alu_data2=*/32'd0, /*is_branch=*/1'b0, /*pc_data=*/32'd8);
 
     // bltu x1, x2, 8 (taken)
-    check_data(/*instr=*/32'h0020e463, /*reg_write=*/1'b0, /*reg_write_addr=*/5'd0, /*reg_write_data=*/32'd0, /*alu_data1=*/32'd5, /*alu_data2=*/32'd8, /*is_branch=*/1'b1, /*pc_data=*/32'd8);
+    check_data(/*instr=*/32'h0020e463, /*reg_write=*/1'b0, /*reg_write_addr=*/5'd0, /*reg_write_data=*/32'd0, /*alu_data1=*/32'd0, /*alu_data2=*/32'd0, /*is_branch=*/1'b1, /*pc_data=*/32'd8);
 
     // bgeu x1, x2, 8 (not taken)
-    check_data(/*instr=*/32'h0020f463, /*reg_write=*/1'b0, /*reg_write_addr=*/5'd0, /*reg_write_data=*/32'd0, /*alu_data1=*/32'd5, /*alu_data2=*/32'd8, /*is_branch=*/1'b0, /*pc_data=*/32'd8);
+    check_data(/*instr=*/32'h0020f463, /*reg_write=*/1'b0, /*reg_write_addr=*/5'd0, /*reg_write_data=*/32'd0, /*alu_data1=*/32'd0, /*alu_data2=*/32'd0, /*is_branch=*/1'b0, /*pc_data=*/32'd8);
 
     // beq x1, x1, 8 (taken)
-    check_data(/*instr=*/32'h00108463, /*reg_write=*/1'b0, /*reg_write_addr=*/5'd0, /*reg_write_data=*/32'd0, /*alu_data1=*/32'd5, /*alu_data2=*/32'd8, /*is_branch=*/1'b1, /*pc_data=*/32'd8);
+    check_data(/*instr=*/32'h00108463, /*reg_write=*/1'b0, /*reg_write_addr=*/5'd0, /*reg_write_data=*/32'd0, /*alu_data1=*/32'd0, /*alu_data2=*/32'd0, /*is_branch=*/1'b1, /*pc_data=*/32'd8);
 
     // bne x1, x1, 8 (not taken)
-    check_data(/*instr=*/32'h00109463, /*reg_write=*/1'b0, /*reg_write_addr=*/5'd0, /*reg_write_data=*/32'd0, /*alu_data1=*/32'd5, /*alu_data2=*/32'd8, /*is_branch=*/1'b0, /*pc_data=*/32'd8);
+    check_data(/*instr=*/32'h00109463, /*reg_write=*/1'b0, /*reg_write_addr=*/5'd0, /*reg_write_data=*/32'd0, /*alu_data1=*/32'd0, /*alu_data2=*/32'd0, /*is_branch=*/1'b0, /*pc_data=*/32'd8);
 
     // blt x2, x1, 8 (not taken)
-    check_data(/*instr=*/32'h00114463, /*reg_write=*/1'b0, /*reg_write_addr=*/5'd0, /*reg_write_data=*/32'd0, /*alu_data1=*/32'd10, /*alu_data2=*/32'd8, /*is_branch=*/1'b0, /*pc_data=*/32'd8);
+    check_data(/*instr=*/32'h00114463, /*reg_write=*/1'b0, /*reg_write_addr=*/5'd0, /*reg_write_data=*/32'd0, /*alu_data1=*/32'd0, /*alu_data2=*/32'd0, /*is_branch=*/1'b0, /*pc_data=*/32'd8);
 
     // bge x2, x1, 8 (taken)
-    check_data(/*instr=*/32'h00115463, /*reg_write=*/1'b0, /*reg_write_addr=*/5'd0, /*reg_write_data=*/32'd0, /*alu_data1=*/32'd10, /*alu_data2=*/32'd8, /*is_branch=*/1'b1, /*pc_data=*/32'd8);
+    check_data(/*instr=*/32'h00115463, /*reg_write=*/1'b0, /*reg_write_addr=*/5'd0, /*reg_write_data=*/32'd0, /*alu_data1=*/32'd0, /*alu_data2=*/32'd0, /*is_branch=*/1'b1, /*pc_data=*/32'd8);
 
     pc = 32;
 
     #1;
 
     // beq x1, x1, -8 (taken)
-    check_data(/*instr=*/32'hfe108ce3, /*reg_write=*/1'b0, /*reg_write_addr=*/5'd0, /*reg_write_data=*/32'd0, /*alu_data1=*/32'd5, /*alu_data2=*/32'hfffffff8, /*is_branch=*/1'b1, /*pc_data=*/32'd24);
+    check_data(/*instr=*/32'hfe108ce3, /*reg_write=*/1'b0, /*reg_write_addr=*/5'd0, /*reg_write_data=*/32'd0, /*alu_data1=*/32'd0, /*alu_data2=*/32'd0, /*is_branch=*/1'b1, /*pc_data=*/32'd24);
 
     // bne x1, x2, -8 (taken)
-    check_data(/*instr=*/32'hfe209ce3, /*reg_write=*/1'b0, /*reg_write_addr=*/5'd0, /*reg_write_data=*/32'd0, /*alu_data1=*/32'd5, /*alu_data2=*/32'hfffffff8, /*is_branch=*/1'b1, /*pc_data=*/32'd24);
+    check_data(/*instr=*/32'hfe209ce3, /*reg_write=*/1'b0, /*reg_write_addr=*/5'd0, /*reg_write_data=*/32'd0, /*alu_data1=*/32'd0, /*alu_data2=*/32'd0, /*is_branch=*/1'b1, /*pc_data=*/32'd24);
 
     pc = 0;
 

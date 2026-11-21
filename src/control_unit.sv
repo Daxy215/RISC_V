@@ -338,9 +338,6 @@ module control_unit(
             arithmetic_type = ADD;
             reg_write_source = ALU;
 
-            alu_data1 = gpr[instruction_fields.rs1];
-            alu_data2 = instruction_fields.imm16;
-
             //pc = pc + imm;
             is_branch = gpr[instruction_fields.rs1] == gpr[instruction_fields.rs2];
             pc_data = pc + instruction_fields.imm16;
@@ -355,9 +352,6 @@ module control_unit(
 
             arithmetic_type = ADD;
             reg_write_source = ALU;
-
-            alu_data1 = gpr[instruction_fields.rs1];
-            alu_data2 = instruction_fields.imm16;
 
             //pc = pc + imm;
             is_branch = gpr[instruction_fields.rs1] != gpr[instruction_fields.rs2];
@@ -374,9 +368,6 @@ module control_unit(
             arithmetic_type = ADD;
             reg_write_source = ALU;
 
-            alu_data1 = gpr[instruction_fields.rs1];
-            alu_data2 = instruction_fields.imm16;
-
             //pc = pc + imm;
             is_branch = $signed(gpr[instruction_fields.rs1]) < $signed(gpr[instruction_fields.rs2]);
             pc_data = pc + instruction_fields.imm16;
@@ -391,9 +382,6 @@ module control_unit(
 
             arithmetic_type = ADD;
             reg_write_source = ALU;
-
-            alu_data1 = gpr[instruction_fields.rs1];
-            alu_data2 = instruction_fields.imm16;
 
             //pc = pc + imm;
             is_branch = $signed(gpr[instruction_fields.rs1]) >= $signed(gpr[instruction_fields.rs2]);
@@ -410,9 +398,6 @@ module control_unit(
             arithmetic_type = ADD;
             reg_write_source = ALU;
 
-            alu_data1 = gpr[instruction_fields.rs1];
-            alu_data2 = instruction_fields.imm16;
-
             //pc = pc + imm;
             is_branch = gpr[instruction_fields.rs1] < gpr[instruction_fields.rs2];
             pc_data = pc + instruction_fields.imm16;
@@ -427,9 +412,6 @@ module control_unit(
 
             arithmetic_type = ADD;
             reg_write_source = ALU;
-
-            alu_data1 = gpr[instruction_fields.rs1];
-            alu_data2 = instruction_fields.imm16;
 
             //pc = pc + imm;
             is_branch = gpr[instruction_fields.rs1] >= gpr[instruction_fields.rs2];
