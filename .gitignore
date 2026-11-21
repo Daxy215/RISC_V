@@ -1,0 +1,11 @@
+*.vcd
+/.history
+/.idea
+*.wbk
+*.kicad_pro
+*.kicad_sch
+/build
+*.kicad_prl
+*.kicad_pcb
+/riscv-cpu
+*.lck
