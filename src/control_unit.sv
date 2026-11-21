@@ -3,6 +3,8 @@ import opcodes::*;
 import control_unit_write_source::*;
 import alu_arithmetic_types::*;
 
+// TODO: LB, LH, LW, LBU, LHU, SB, SH, SW, FENCE(nop ig?), ECALL(nop ig?), EBREAK(nop ig?)
+
 module control_unit(
   input instruction_fields_t instruction_fields,
 
@@ -354,6 +356,21 @@ module control_unit(
 
         else
           $fatal(1, "Unhandled Arithmetic opcode: 0b%0b, 0b%0b", instruction_fields.funct3, instruction_fields.funct7);
+      end
+
+      // LUI - Load Upper Immediate
+      `OP_ALU_LUI : begin
+        // imm[31:12], rd, 0b0110111, LUI
+        // rd = imm << 12
+
+        reg_write      = 1'b1;
+        reg_write_addr = instruction_fields.rd;
+
+        arithmetic_type = ADD;
+        reg_write_source = ALU;
+
+        alu_data1 = 32'b0;
+        alu_data2 = instruction_fields.imm16;
       end
 
       `OP_ALU_BRANCH : begin

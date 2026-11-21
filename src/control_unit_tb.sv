@@ -559,6 +559,76 @@ module control_unit_tb;
     // slti x21, x21, 0
     check_data(/*instr=*/32'h000aaa93, /*reg_write=*/1'b1, /*reg_write_addr=*/5'd21, /*reg_write_data=*/32'd1, /*alu_data1=*/32'hffffffff, /*alu_data2=*/32'h00000000, /*is_branch=*/1'b0, /*pc_data=*/32'd0);
 
+    pc = 32'h00000000;
+
+    #1;
+
+    // lui x22, 0x00000
+    check_data(/*instr=*/32'h00000b37, /*reg_write=*/1'b1, /*reg_write_addr=*/5'd22, /*reg_write_data=*/32'h00000000, /*alu_data1=*/32'd0, /*alu_data2=*/32'h00000000, /*is_branch=*/1'b0, /*pc_data=*/32'd0);
+
+    pc = 32'h00000000;
+
+    #1;
+
+    // lui x23, 0x00001
+    check_data(/*instr=*/32'h00001bb7, /*reg_write=*/1'b1, /*reg_write_addr=*/5'd23, /*reg_write_data=*/32'h00001000, /*alu_data1=*/32'd0, /*alu_data2=*/32'h00001000, /*is_branch=*/1'b0, /*pc_data=*/32'd0);
+
+    pc = 32'h00000000;
+
+    #1;
+
+    // lui x24, 0x12345
+    check_data(/*instr=*/32'h12345c37, /*reg_write=*/1'b1, /*reg_write_addr=*/5'd24, /*reg_write_data=*/32'h12345000, /*alu_data1=*/32'd0, /*alu_data2=*/32'h12345000, /*is_branch=*/1'b0, /*pc_data=*/32'd0);
+
+    pc = 32'h00000000;
+
+    #1;
+
+    // lui x25, 0x7ffff
+    check_data(/*instr=*/32'h7ffffcb7, /*reg_write=*/1'b1, /*reg_write_addr=*/5'd25, /*reg_write_data=*/32'h7ffff000, /*alu_data1=*/32'd0, /*alu_data2=*/32'h7ffff000, /*is_branch=*/1'b0, /*pc_data=*/32'd0);
+
+    pc = 32'h00000000;
+
+    #1;
+
+    // lui x26, 0x80000
+    check_data(/*instr=*/32'h80000d37, /*reg_write=*/1'b1, /*reg_write_addr=*/5'd26, /*reg_write_data=*/32'h80000000, /*alu_data1=*/32'd0, /*alu_data2=*/32'h80000000, /*is_branch=*/1'b0, /*pc_data=*/32'd0);
+
+    pc = 32'h00000000;
+
+    #1;
+
+    // lui x27, 0xfffff
+    check_data(/*instr=*/32'hfffffdb7, /*reg_write=*/1'b1, /*reg_write_addr=*/5'd27, /*reg_write_data=*/32'hfffff000, /*alu_data1=*/32'd0, /*alu_data2=*/32'hfffff000, /*is_branch=*/1'b0, /*pc_data=*/32'd0);
+
+    pc = 32'h12345678;
+
+    #1;
+
+    // lui x28, 0xabcde
+    check_data(/*instr=*/32'habcdee37, /*reg_write=*/1'b1, /*reg_write_addr=*/5'd28, /*reg_write_data=*/32'habcde000, /*alu_data1=*/32'd0, /*alu_data2=*/32'habcde000, /*is_branch=*/1'b0, /*pc_data=*/32'd0);
+
+    pc = 32'hffffffff;
+
+    #1;
+
+    // lui x28, 0x00000
+    check_data(/*instr=*/32'h00000e37, /*reg_write=*/1'b1, /*reg_write_addr=*/5'd28, /*reg_write_data=*/32'h00000000, /*alu_data1=*/32'd0, /*alu_data2=*/32'h00000000, /*is_branch=*/1'b0, /*pc_data=*/32'd0);
+
+    pc = 32'h00000004;
+
+    #1;
+
+    // lui x0, 0x12345
+    check_data(/*instr=*/32'h12345037, /*reg_write=*/1'b1, /*reg_write_addr=*/5'd0, /*reg_write_data=*/32'h12345000, /*alu_data1=*/32'd0, /*alu_data2=*/32'h12345000, /*is_branch=*/1'b0, /*pc_data=*/32'd0);
+
+    pc = 32'h00000100;
+
+    #1;
+
+    // lui x31, 0x55555
+    check_data(/*instr=*/32'h55555fb7, /*reg_write=*/1'b1, /*reg_write_addr=*/5'd31, /*reg_write_data=*/32'h55555000, /*alu_data1=*/32'd0, /*alu_data2=*/32'h55555000, /*is_branch=*/1'b0, /*pc_data=*/32'd0);
+
     $finish;
   end
 
