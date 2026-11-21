@@ -29,6 +29,19 @@ module instruction_decoder(
       instruction_fields.imm16 = $signed(data[31:20]);
     end
 
+    // B-Type
+    else if (instruction_fields.opcode == `OP_ALU_BRANCH) begin
+      // imm[12|10:5], rs2, rs1, funct3, imm[4:1|11], 0b1100011
+      instruction_fields.imm16 = {
+        {19{data[31]}},
+        data[31],
+        data[7],
+        data[30:25],
+        data[11:8],
+        1'b0
+      };
+    end
+
     // U-Type
     else if (instruction_fields.opcode == `OP_ALU_JAL) begin
       // A special case

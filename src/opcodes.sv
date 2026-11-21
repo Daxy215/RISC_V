@@ -1,6 +1,7 @@
 package opcodes;
   `define OP_ALU_IMM    7'b0010011 // AddI, SLTI, SLTIU, XORI, ORI, ANDI, SLLI, SRLI, SRAI
   `define OP_ALU_ARTH   7'b0110011 // SLLI, SRLI, SRAI, ADD, SUB, SLL, SLT, SLTU, XOR, SRL, SRA, OR, AND
+  `define OP_ALU_BRANCH 7'b1100011 // BEQ, BNE, BLT, BGE, BLTU, BGEU
   `define OP_ALU_JAL    7'b1101111 // Jal
 
   // TODO;

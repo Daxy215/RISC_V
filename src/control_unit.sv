@@ -310,6 +310,120 @@ module control_unit(
           $fatal(1, "Unhandled Arithmetic opcode: 0b%0b, 0b%0b", instruction_fields.funct3, instruction_fields.funct7);
       end
 
+      `OP_ALU_BRANCH : begin
+        case (instruction_fields.funct3)
+          // BEQ - Branch if Equal
+          3'b000 : begin
+            // imm[12|10:5], rs2, rs1, 000, imm[4:1|11], 0b1100011, BEQ
+            // if (rs1 == rs2) pc += imm
+
+            reg_write = 1'b0;
+
+            arithmetic_type = ADD;
+            reg_write_source = ALU;
+
+            alu_data1 = gpr[instruction_fields.rs1];
+            alu_data2 = instruction_fields.imm16;
+
+            //pc = pc + imm;
+            is_branch = gpr[instruction_fields.rs1] == gpr[instruction_fields.rs2];
+            pc_data = pc + instruction_fields.imm16;
+          end
+
+          // BNE - Branch if Not Equal
+          3'b001 : begin
+            // imm[12|10:5], rs2, rs1, 001, imm[4:1|11], 0b1100011, BNE
+            // if (rs1 != rs2) pc += imm
+
+            reg_write = 1'b0;
+
+            arithmetic_type = ADD;
+            reg_write_source = ALU;
+
+            alu_data1 = gpr[instruction_fields.rs1];
+            alu_data2 = instruction_fields.imm16;
+
+            //pc = pc + imm;
+            is_branch = gpr[instruction_fields.rs1] != gpr[instruction_fields.rs2];
+            pc_data = pc + instruction_fields.imm16;
+          end
+
+          // BLT - Branch if Less Than
+          3'b100 : begin
+            // imm[12|10:5], rs2, rs1, 100, imm[4:1|11], 0b1100011, BLT
+            // if (rs1 < rs2) pc += imm
+
+            reg_write = 1'b0;
+
+            arithmetic_type = ADD;
+            reg_write_source = ALU;
+
+            alu_data1 = gpr[instruction_fields.rs1];
+            alu_data2 = instruction_fields.imm16;
+
+            //pc = pc + imm;
+            is_branch = $signed(gpr[instruction_fields.rs1]) < $signed(gpr[instruction_fields.rs2]);
+            pc_data = pc + instruction_fields.imm16;
+          end
+
+          // BGE - Branch if Greater Than or Equal
+          3'b101 : begin
+            // imm[12|10:5], rs2, rs1, 101, imm[4:1|11], 0b1100011, BGE
+            // if (rs1 >= rs2) pc += imm
+
+            reg_write = 1'b0;
+
+            arithmetic_type = ADD;
+            reg_write_source = ALU;
+
+            alu_data1 = gpr[instruction_fields.rs1];
+            alu_data2 = instruction_fields.imm16;
+
+            //pc = pc + imm;
+            is_branch = $signed(gpr[instruction_fields.rs1]) >= $signed(gpr[instruction_fields.rs2]);
+            pc_data = pc + instruction_fields.imm16;
+          end
+
+          // BLTU - Branch if Less Than Unsigned
+          3'b110 : begin
+            // imm[12|10:5], rs2, rs1, 110, imm[4:1|11], 0b1100011, BLTU
+            // if (rs1 < rs2) pc += imm
+
+            reg_write = 1'b0;
+
+            arithmetic_type = ADD;
+            reg_write_source = ALU;
+
+            alu_data1 = gpr[instruction_fields.rs1];
+            alu_data2 = instruction_fields.imm16;
+
+            //pc = pc + imm;
+            is_branch = gpr[instruction_fields.rs1] < gpr[instruction_fields.rs2];
+            pc_data = pc + instruction_fields.imm16;
+          end
+
+          // BGEU - Branch if Greater Than or Equal Unsigned
+          3'b111 : begin
+            // imm[12|10:5], rs2, rs1, 111, imm[4:1|11], 0b1100011, BGEU
+            // if (rs1 >= rs2) pc += imm
+
+            reg_write = 1'b0;
+
+            arithmetic_type = ADD;
+            reg_write_source = ALU;
+
+            alu_data1 = gpr[instruction_fields.rs1];
+            alu_data2 = instruction_fields.imm16;
+
+            //pc = pc + imm;
+            is_branch = gpr[instruction_fields.rs1] >= gpr[instruction_fields.rs2];
+            pc_data = pc + instruction_fields.imm16;
+          end
+
+          default : $fatal(1, "Unhandled branch instruction funct3: 0b%0b", instruction_fields.funct3);
+        endcase
+      end
+
       `OP_ALU_JAL : begin
         // imm[20|10:1|11|19:12] rd 0b1101111 JAL
         // rd = pc+4; pc += imm
