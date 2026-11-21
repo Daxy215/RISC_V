@@ -302,9 +302,14 @@ module control_unit_tb;
     assert (is_branch === expected_is_branch)
         else $fatal(1, "Incorrect is_branch: 0b%0b expected: 0b%0b", is_branch, expected_is_branch);
 
-    if (instr[6:0] == 7'b1100011 || instr[6:0] == 7'b1101111) begin
-      assert (pc_data === expected_pc_data)
-          else $fatal(1, "Incorrect pc_data: 0x%0h expected: 0x%0h", pc_data, expected_pc_data);
+    assert (pc_data === expected_pc_data)
+        else $fatal(1, "Incorrect pc_data: 0x%0h expected: 0x%0h", pc_data, expected_pc_data);
+
+    // For now.. I only have an ALU
+    if (reg_write) begin
+      assert (reg_write_source === ALU)
+          else $fatal(1, "Incorrect reg_write_source");
+      assert (alu_result === expected_reg_write_data)
     end
 
     // Just so it actually runs
