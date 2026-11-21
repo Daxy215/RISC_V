@@ -155,6 +155,22 @@ module control_unit(
         endcase
       end
 
+      // AUIPIC - Add Upper Immediate to PC
+      `OP_ALU_AUIPC : begin
+        // imm[31:12], rd, 0b0010111, AUIPC
+        // rd = pc + (imm << 12)
+
+        is_branch = 1'b0;
+        reg_write = 1'b1;
+        reg_write_addr = instruction_fields.rd;
+
+        arithmetic_type = ADD;
+        reg_write_source = ALU;
+
+        alu_data1 = pc;
+        alu_data2 = instruction_fields.imm16;
+      end
+
       `OP_ALU_ARTH : begin
         // ADD
         if(instruction_fields.funct3 == 3'b000 && instruction_fields.funct7 == 7'b0000000) begin

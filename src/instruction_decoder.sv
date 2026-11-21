@@ -43,6 +43,12 @@ module instruction_decoder(
     end
 
     // U-Type
+    else if (instruction_fields.opcode == `OP_ALU_AUIPC) begin
+      // imm[31:12], rd, 0b0010111
+      instruction_fields.imm16 = {data[31:12], 12'b0};
+    end
+
+    // J-Type
     else if (instruction_fields.opcode == `OP_ALU_JAL) begin
       // A special case
       // imm[20|10:1|11|19:12]
