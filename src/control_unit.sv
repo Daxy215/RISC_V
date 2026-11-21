@@ -187,7 +187,7 @@ module control_unit(
         end
 
         // SLL - Shift Left Logical
-        else if (instruction_fields.funct3 == 3'b001 && instruction_fields.funct7 == 7'b0100000) begin
+        else if (instruction_fields.funct3 == 3'b001 && instruction_fields.funct7 == 7'b0000000) begin
           // 0000000 rs2 rs1 001 rd 0110011 SLL
           // rd = rs1 << rs2
 
@@ -203,7 +203,7 @@ module control_unit(
 
         // SLT - Set Less Than
         else if (instruction_fields.funct3 == 3'b010 && instruction_fields.funct7 == 7'b0000000) begin
-          // 0000000 rs2 rs1 100 rd 0110011 SLT
+          // 0000000 rs2 rs1 010 rd 0110011 SLT
           // rd = (rs1 < rs2)
 
           reg_write      = 1'b1;
