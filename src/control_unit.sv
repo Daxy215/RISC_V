@@ -71,6 +71,21 @@ module control_unit(
             alu_data2 = instruction_fields.shamt;
           end
 
+          // SLTI - Set Less Than Immediate
+          3'b010 : begin
+            // imm[11:0], rs1, 010, rd, 0b0010011, SLTI
+            // rd = (rs1 < imm)
+
+            reg_write      = 1'b1;
+            reg_write_addr = instruction_fields.rd;
+
+            arithmetic_type = SIGNED_LESS_THAN;
+            reg_write_source = ALU;
+
+            alu_data1 = gpr[instruction_fields.rs1];
+            alu_data2 = instruction_fields.imm16;
+          end
+
           // SLTIU - Set Less Than Immediate Unsigned
           3'b011 : begin
             // imm[11:0], rs1, 011, rd, 0b0010011, SLTIU
