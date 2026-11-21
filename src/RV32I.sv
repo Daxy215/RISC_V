@@ -1,5 +1,16 @@
 module RV32I(
-  logic reset
+  input logic clk,
+  input logic reset,
+
+  output logic [31:0] instruction_addr,
+  input  logic [31:0] instruction_data,
+
+  output logic [31:0] mem_addr,
+  output logic [31:0] mem_write_data,
+  input  logic [31:0] mem_read_data,
+  output logic        mem_read,
+  output logic        mem_write,
+  output logic [3:0]   mem_byte_enable
 );
 
   import types_pkg::*;
@@ -11,28 +22,15 @@ module RV32I(
    * each being 32 bits wide.
    * plus a PC
    */
-  reg clk;
 
   // 32 registers each 32 bits wide
   logic [31:0] gpr [31:0] = '{default:0};
   logic [31:0] pc = 0, next_pc = 0;
 
-  // Used for data fetching
-  reg [31:0] memFetchAddr = 0;
-  reg [31:0] memFetchRes;
-
-  ROM #(
-
-  ) u_ROM (
-    .addr  (memFetchAddr),
-    .result(memFetchRes)
-  );
+  assign instruction_addr = pc;
 
   instruction_fields_t instruction_fields;
 
-  logic [31:0] instruction_data;
-  assign instruction_data = memFetchRes;
-  
   instruction_decoder u_instruction_decoder (
     .data              (instruction_data),
     .instruction_fields(instruction_fields)
@@ -52,17 +50,8 @@ module RV32I(
   logic        reg_write;
   logic [4:0]  reg_write_addr;
 
-  logic pc_write;
-  logic [31:0] pc_data;
-  logic [31:0] branch_sum, pc_sum;
-  
-  adder u_branch_adder (
-    .data1 (pc),
-    .data2 (alu_data2),
-    .result(pc_data),
-    .c_out ()
-  );
-  
+  logic [31:0] pc_data, pc_sum;
+
   adder u_pc_adder (
     .data1 (pc),
     .data2 (4),
@@ -73,6 +62,14 @@ module RV32I(
   bit is_branch;
 
   write_source reg_write_source;
+  logic mem_read_request, mem_write_request;
+  logic [31:0] reg_write_data;
+
+  assign mem_addr = alu_result;
+  assign mem_write_data = gpr[instruction_fields.rs2];
+  assign mem_read = mem_read_request && !reset;
+  assign mem_write = mem_write_request && !reset;
+  assign reg_write_data = reg_write_source == MEMORY ? mem_read_data : alu_result;
   
   control_unit u_control_unit (
     .instruction_fields(instruction_fields),
@@ -81,6 +78,11 @@ module RV32I(
 
     .alu_data1         (alu_data1),
     .alu_data2         (alu_data2),
+    .arithmetic_type   (arithmetic_type),
+
+    .mem_read          (mem_read_request),
+    .mem_write         (mem_write_request),
+    .mem_byte_enable   (mem_byte_enable),
 
     .reg_write         (reg_write),
     .reg_write_addr    (reg_write_addr),
@@ -90,15 +92,9 @@ module RV32I(
     .pc_data           (pc_data)
   );
 
-  initial begin
-    clk = 1'b0;
-  end
-
-  always #200 clk = ~clk; // 25 MHz
-
   always_comb begin
       if(is_branch)
-        next_pc = branch_sum;
+        next_pc = pc_data;
       else
         next_pc = pc_sum;
   end
@@ -106,7 +102,6 @@ module RV32I(
   always_ff @(posedge clk, posedge reset) begin
     if (reset) begin
       pc           <= 32'b0;
-      memFetchAddr <= 32'b0;
       gpr          <= '{default:0};
     end
 
@@ -116,12 +111,9 @@ module RV32I(
        * data provided from the control unit
        */
       if (reg_write && reg_write_addr != 0)
-        gpr[reg_write_addr] <= alu_result;
+        gpr[reg_write_addr] <= reg_write_data;
 
       pc <= next_pc;
-
-      // Fetch next instruction
-      memFetchAddr <= next_pc;
     end
   end
 

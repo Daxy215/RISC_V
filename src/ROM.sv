@@ -1,6 +1,7 @@
 module ROM
 #(
-  parameter ROM_SIZE = 5
+  parameter ROM_SIZE = 5,
+  parameter ROM_FILE = "rom_image.mem"
 )
 
 (
@@ -13,7 +14,7 @@ module ROM
 
   initial begin
     $display("Loading rom.");
-    $readmemh("rom_image.mem", memory, 0, ROM_SIZE - 1);
+    $readmemh(ROM_FILE, memory, 0, ROM_SIZE - 1);
   end
 
   // >> 2 for alignment

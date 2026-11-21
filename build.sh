@@ -41,7 +41,7 @@ run_test() {
     echo "Testing: $name"
     echo "================================"
 
-    verilator --binary --timing -Wno-fatal \
+    verilator --binary --timing --assert -Wno-fatal \
       --top-module "${name}_tb" \
       --Mdir "$BUILD_DIR/${name}_obj" \
       -o "${name}_tb" \
@@ -76,8 +76,7 @@ run_all_tests() {
 }
 
 # Main
-case "${1:-}" in
-    -tb)
+case "${1:-}" in -tb)
         if [[ "${2:-all}" == "all" ]]; then
             run_all_tests
         else
@@ -86,20 +85,12 @@ case "${1:-}" in
         ;;
 
     "")
-        echo "Building RV32I..."
-
-        verilator --binary --timing -Wno-fatal \
-                 --top-module RV32I \
-                 --Mdir "$BUILD_DIR/rv32_obj" \
-                 -o rv32 \
-                 "${RTL_FILES[@]}"
-
-        "$BUILD_DIR/rv32_obj/rv32"
+        run_test soc
         ;;
 
     *)
         echo "Usage:"
-        echo "  $0                       Run RV32I"
+        echo "  $0                       Run SoC simulation"
         echo "  $0 -tb <name>            Run specific test"
         echo "  $0 -tb all               Run all tests"
         exit 1

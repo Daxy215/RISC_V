@@ -19,6 +19,9 @@ module control_unit_tb;
   write_source reg_write_source;
   write_source alu_source;
 
+  logic mem_read, mem_write;
+  logic [3:0] mem_byte_enable;
+
   bit is_branch;
 
   logic [31:0] pc_data;
@@ -47,6 +50,9 @@ module control_unit_tb;
     .reg_write         (reg_write),
     .reg_write_addr    (reg_write_addr),
     .reg_write_source  (reg_write_source),
+    .mem_read          (mem_read),
+    .mem_write         (mem_write),
+    .mem_byte_enable   (mem_byte_enable),
     .is_branch         (is_branch),
     .pc_data           (pc_data)
   );
@@ -651,6 +657,9 @@ module control_unit_tb;
     instruction_data = instr;
 
     #10;
+
+    assert (!mem_read && !mem_write && mem_byte_enable == 0)
+        else $fatal(1, "Unexpected memory access for non-memory instruction");
 
     assert (reg_write === expected_reg_write)
         else $fatal(1, "Incorrect reg_write: 0b%0b expected: 0b%0b", reg_write, expected_reg_write);

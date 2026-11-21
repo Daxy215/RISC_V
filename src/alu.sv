@@ -25,19 +25,19 @@ module alu(
         adder_a = data1;
         adder_b = arithmetic_type == ADD ? data2 : -data2;
 
-        result <= adder_result;
+        result = adder_result;
       end
 
-      AND:              begin result <= data1 &   data2; end
-      OR:               begin result <= data1 |   data2; end
-      XOR:              begin result <= data1 ^   data2; end
-      LOGICAL_LEFT:     begin result <= data1 <<  data2; end
-      ARITHMETIC_LEFT:  begin result <= $signed(data1) <<< data2; end
-      LOGICAL_RIGHT:    begin result <= data1 >>  data2; end
-      ARITHMETIC_RIGHT: begin result <= $signed(data1) >>> data2; end
-      EQUAL:            begin result <= data1 ==  data2; end // Should I test for z and x too?
-      LESS_THAN:        begin result <= data1 <   data2; end
-      SIGNED_LESS_THAN: begin result <= $signed(data1) < $signed(data2); end
+      AND:              begin result = data1 &   data2; end
+      OR:               begin result = data1 |   data2; end
+      XOR:              begin result = data1 ^   data2; end
+      LOGICAL_LEFT:     begin result = data1 <<  data2; end
+      ARITHMETIC_LEFT:  begin result = $signed(data1) <<< data2; end
+      LOGICAL_RIGHT:    begin result = data1 >>  data2; end
+      ARITHMETIC_RIGHT: begin result = $signed(data1) >>> data2; end
+      EQUAL:            begin result = data1 ==  data2; end // Should I test for z and x too?
+      LESS_THAN:        begin result = data1 <   data2; end
+      SIGNED_LESS_THAN: begin result = $signed(data1) < $signed(data2); end
       default: begin $fatal(1, "ALU unhandled arithmetic type of %0s", arithmetic_type.name()); end
     endcase
   end

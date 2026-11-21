@@ -19,7 +19,7 @@ module instruction_decoder_tb;
     check_i_type(/*instr=*/32'h00500093, /*op=*/7'b0010011, /*rd=*/1, /*funct3=*/3'b000, /*rs1=*/0, /*rs2=*/5, /*shmat=*/5, /*funct7=*/7'b0000000, /*imm=*/5);
 
     // addi x1, x0, -1
-    check_i_type(/*instr=*/32'hFFF00093, /*op=*/7'b0010011, /*rd=*/1, /*funct3=*/3'b000, /*rs1=*/0, /*rs2=*/-1, /*shmat=*/-1, /*funct7=*/0, /*imm=*/32'hFFFFFFFF);
+    check_i_type(/*instr=*/32'hFFF00093, /*op=*/7'b0010011, /*rd=*/1, /*funct3=*/3'b000, /*rs1=*/0, /*rs2=*/-1, /*shmat=*/-1, /*funct7=*/7'b1111111, /*imm=*/32'hFFFFFFFF);
 
     // addi x5, x6, 7
     // Technically, RS2 should be 0, but it's changing due to imm,

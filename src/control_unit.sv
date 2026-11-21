@@ -18,6 +18,10 @@ module control_unit(
   output logic [4:0]  reg_write_addr,
   output write_source reg_write_source,
 
+  output logic       mem_read,
+  output logic       mem_write,
+  output logic [3:0] mem_byte_enable,
+
   output bit is_branch,
   output logic [31:0] pc_data
 );
@@ -30,6 +34,10 @@ module control_unit(
     reg_write        = 1'b0;
     reg_write_addr   = 4'b000;
     reg_write_source = ALU;
+
+    mem_read = 1'b0;
+    mem_write = 1'b0;
+    mem_byte_enable = 4'b0000;
 
     alu_data1 = 32'b0;
     alu_data2 = 32'b0;
