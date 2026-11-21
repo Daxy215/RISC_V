@@ -24,6 +24,7 @@ module instruction_decoder(
     // I-Types
     else if (instruction_fields.opcode == `OP_ALU_IMM) begin
       // Sign extended to 16 from 12
+      instruction_fields.shamt = data[24:20];
       instruction_fields.imm16 = $signed(data[31:20]);
     end
 
