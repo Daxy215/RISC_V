@@ -3,7 +3,7 @@ import opcodes::*;
 import control_unit_write_source::*;
 import alu_arithmetic_types::*;
 
-// TODO: LB, LH, LW, LBU, LHU, SB, SH, SW, FENCE(nop ig?), ECALL(nop ig?), EBREAK(nop ig?)
+// TODO: FENCE(nop ig?), ECALL(nop ig?), EBREAK(nop ig?)
 
 module control_unit(
   input instruction_fields_t instruction_fields,
@@ -46,6 +46,102 @@ module control_unit(
     pc_data   = 32'b0;
 
     case (instruction_fields.opcode)
+      `OP_ALU_LOAD : begin
+        case (instruction_fields.funct3)
+          // LB - Load Byte
+          3'b000 : begin
+            // imm[11:0], rs1, 000, rd, 0b0000011, LB
+            // rd = memory[rs1 + imm]
+
+            reg_write      = 1'b1;
+            reg_write_addr = instruction_fields.rd;
+
+            arithmetic_type = ADD;
+            reg_write_source = MEMORY;
+
+            mem_read = 1'b1;
+            mem_byte_enable = 4'b0001;
+
+            alu_data1 = gpr[instruction_fields.rs1];
+            alu_data2 = instruction_fields.imm16;
+          end
+
+          // LH - Load Halfword
+          3'b001 : begin
+            // imm[11:0], rs1, 001, rd, 0b0000011, LH
+            // rd = memory[rs1 + imm]
+
+            reg_write      = 1'b1;
+            reg_write_addr = instruction_fields.rd;
+
+            arithmetic_type = ADD;
+            reg_write_source = MEMORY;
+
+            mem_read = 1'b1;
+            mem_byte_enable = 4'b0011;
+
+            alu_data1 = gpr[instruction_fields.rs1];
+            alu_data2 = instruction_fields.imm16;
+          end
+
+          // LW - Load Word
+          3'b010 : begin
+            // imm[11:0], rs1, 010, rd, 0b0000011, LW
+            // rd = memory[rs1 + imm]
+
+            reg_write      = 1'b1;
+            reg_write_addr = instruction_fields.rd;
+
+            arithmetic_type = ADD;
+            reg_write_source = MEMORY;
+
+            mem_read = 1'b1;
+            mem_byte_enable = 4'b1111;
+
+            alu_data1 = gpr[instruction_fields.rs1];
+            alu_data2 = instruction_fields.imm16;
+          end
+
+          // LBU - Load Byte Unsigned
+          3'b100 : begin
+            // imm[11:0], rs1, 100, rd, 0b0000011, LBU
+            // rd = memory[rs1 + imm]
+
+            reg_write      = 1'b1;
+            reg_write_addr = instruction_fields.rd;
+
+            arithmetic_type = ADD;
+            reg_write_source = MEMORY;
+
+            mem_read = 1'b1;
+            mem_byte_enable = 4'b0001;
+
+            alu_data1 = gpr[instruction_fields.rs1];
+            alu_data2 = instruction_fields.imm16;
+          end
+
+          // LHU - Load Halfword Unsigned
+          3'b101 : begin
+            // imm[11:0], rs1, 101, rd, 0b0000011, LHU
+            // rd = memory[rs1 + imm]
+
+            reg_write      = 1'b1;
+            reg_write_addr = instruction_fields.rd;
+
+            arithmetic_type = ADD;
+            reg_write_source = MEMORY;
+
+            mem_read = 1'b1;
+            mem_byte_enable = 4'b0011;
+
+            alu_data1 = gpr[instruction_fields.rs1];
+            alu_data2 = instruction_fields.imm16;
+          end
+
+          default : $fatal(1, "Unhandled load instruction funct3: 0b%0b", instruction_fields.funct3);
+        endcase
+      end
+
       `OP_ALU_IMM : begin
         case (instruction_fields.funct3)
           // ADDI - ADD Immediate
@@ -209,6 +305,63 @@ module control_unit(
 
         alu_data1 = pc;
         alu_data2 = instruction_fields.imm16;
+      end
+
+      `OP_ALU_STORE : begin
+        case (instruction_fields.funct3)
+          // SB - Store Byte
+          3'b000 : begin
+            // imm[11:5], rs2, rs1, 000, imm[4:0], 0b0100011, SB
+            // memory[rs1 + imm] = rs2
+
+            reg_write = 1'b0;
+
+            arithmetic_type = ADD;
+            reg_write_source = ALU;
+
+            mem_write = 1'b1;
+            mem_byte_enable = 4'b0001;
+
+            alu_data1 = gpr[instruction_fields.rs1];
+            alu_data2 = instruction_fields.imm16;
+          end
+
+          // SH - Store Halfword
+          3'b001 : begin
+            // imm[11:5], rs2, rs1, 001, imm[4:0], 0b0100011, SH
+            // memory[rs1 + imm] = rs2
+
+            reg_write = 1'b0;
+
+            arithmetic_type = ADD;
+            reg_write_source = ALU;
+
+            mem_write = 1'b1;
+            mem_byte_enable = 4'b0011;
+
+            alu_data1 = gpr[instruction_fields.rs1];
+            alu_data2 = instruction_fields.imm16;
+          end
+
+          // SW - Store Word
+          3'b010 : begin
+            // imm[11:5], rs2, rs1, 010, imm[4:0], 0b0100011, SW
+            // memory[rs1 + imm] = rs2
+
+            reg_write = 1'b0;
+
+            arithmetic_type = ADD;
+            reg_write_source = ALU;
+
+            mem_write = 1'b1;
+            mem_byte_enable = 4'b1111;
+
+            alu_data1 = gpr[instruction_fields.rs1];
+            alu_data2 = instruction_fields.imm16;
+          end
+
+          default : $fatal(1, "Unhandled store instruction funct3: 0b%0b", instruction_fields.funct3);
+        endcase
       end
 
       `OP_ALU_ARTH : begin

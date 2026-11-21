@@ -22,11 +22,21 @@ module instruction_decoder(
     end
 
     // I-Types
-    else if (instruction_fields.opcode == `OP_ALU_IMM || instruction_fields.opcode == `OP_ALU_JALR) begin
+    else if (instruction_fields.opcode == `OP_ALU_IMM || instruction_fields.opcode == `OP_ALU_JALR || instruction_fields.opcode == `OP_ALU_LOAD) begin
       // Sign extended to 16 from 12
       instruction_fields.shamt = data[24:20];
       instruction_fields.funct7 = data[31:25];
       instruction_fields.imm16 = $signed(data[31:20]);
+    end
+
+    // S-Type
+    else if (instruction_fields.opcode == `OP_ALU_STORE) begin
+      // imm[11:5], rs2, rs1, funct3, imm[4:0], 0b0100011
+      instruction_fields.imm16 = {
+        {20{data[31]}},
+        data[31:25],
+        data[11:7]
+      };
     end
 
     // B-Type
