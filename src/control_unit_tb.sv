@@ -310,6 +310,7 @@ module control_unit_tb;
       assert (reg_write_source === ALU)
           else $fatal(1, "Incorrect reg_write_source");
       assert (alu_result === expected_reg_write_data)
+          else $fatal(1, "Incorrect ALU result: 0x%0h expected: 0x%0h", alu_result, expected_reg_write_data);
     end
 
     // Just so it actually runs
