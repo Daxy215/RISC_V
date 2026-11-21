@@ -332,6 +332,102 @@ module control_unit_tb;
     // auipc x31, 0xfffff
     check_data(/*instr=*/32'hffffff97, /*reg_write=*/1'b1, /*reg_write_addr=*/5'd31, /*reg_write_data=*/32'hfffff800, /*alu_data1=*/32'h00000800, /*alu_data2=*/32'hfffff000, /*is_branch=*/1'b0, /*pc_data=*/32'd0);
 
+    pc = 32'd0;
+
+    gpr[21] = 32'h00000000;
+
+    #1;
+
+    // sltiu x22, x21, 0
+    check_data(/*instr=*/32'h000abb13, /*reg_write=*/1'b1, /*reg_write_addr=*/5'd22, /*reg_write_data=*/32'd0, /*alu_data1=*/32'h00000000, /*alu_data2=*/32'h00000000, /*is_branch=*/1'b0, /*pc_data=*/32'd0);
+
+    gpr[21] = 32'h00000000;
+
+    #1;
+
+    // sltiu x22, x21, 1
+    check_data(/*instr=*/32'h001abb13, /*reg_write=*/1'b1, /*reg_write_addr=*/5'd22, /*reg_write_data=*/32'd1, /*alu_data1=*/32'h00000000, /*alu_data2=*/32'h00000001, /*is_branch=*/1'b0, /*pc_data=*/32'd0);
+
+    gpr[21] = 32'h00000005;
+
+    #1;
+
+    // sltiu x22, x21, 5
+    check_data(/*instr=*/32'h005abb13, /*reg_write=*/1'b1, /*reg_write_addr=*/5'd22, /*reg_write_data=*/32'd0, /*alu_data1=*/32'h00000005, /*alu_data2=*/32'h00000005, /*is_branch=*/1'b0, /*pc_data=*/32'd0);
+
+    gpr[21] = 32'h00000006;
+
+    #1;
+
+    // sltiu x22, x21, 5
+    check_data(/*instr=*/32'h005abb13, /*reg_write=*/1'b1, /*reg_write_addr=*/5'd22, /*reg_write_data=*/32'd0, /*alu_data1=*/32'h00000006, /*alu_data2=*/32'h00000005, /*is_branch=*/1'b0, /*pc_data=*/32'd0);
+
+    gpr[21] = 32'h000007fe;
+
+    #1;
+
+    // sltiu x22, x21, 2047
+    check_data(/*instr=*/32'h7ffabb13, /*reg_write=*/1'b1, /*reg_write_addr=*/5'd22, /*reg_write_data=*/32'd1, /*alu_data1=*/32'h000007fe, /*alu_data2=*/32'h000007ff, /*is_branch=*/1'b0, /*pc_data=*/32'd0);
+
+    gpr[21] = 32'h80000000;
+
+    #1;
+
+    // sltiu x22, x21, 1
+    check_data(/*instr=*/32'h001abb13, /*reg_write=*/1'b1, /*reg_write_addr=*/5'd22, /*reg_write_data=*/32'd0, /*alu_data1=*/32'h80000000, /*alu_data2=*/32'h00000001, /*is_branch=*/1'b0, /*pc_data=*/32'd0);
+
+    gpr[21] = 32'h00000000;
+
+    #1;
+
+    // sltiu x22, x21, -1
+    check_data(/*instr=*/32'hfffabb13, /*reg_write=*/1'b1, /*reg_write_addr=*/5'd22, /*reg_write_data=*/32'd1, /*alu_data1=*/32'h00000000, /*alu_data2=*/32'hffffffff, /*is_branch=*/1'b0, /*pc_data=*/32'd0);
+
+    gpr[21] = 32'hffffffff;
+
+    #1;
+
+    // sltiu x22, x21, -1
+    check_data(/*instr=*/32'hfffabb13, /*reg_write=*/1'b1, /*reg_write_addr=*/5'd22, /*reg_write_data=*/32'd0, /*alu_data1=*/32'hffffffff, /*alu_data2=*/32'hffffffff, /*is_branch=*/1'b0, /*pc_data=*/32'd0);
+
+    gpr[21] = 32'hfffff7ff;
+
+    #1;
+
+    // sltiu x22, x21, -2048
+    check_data(/*instr=*/32'h800abb13, /*reg_write=*/1'b1, /*reg_write_addr=*/5'd22, /*reg_write_data=*/32'd1, /*alu_data1=*/32'hfffff7ff, /*alu_data2=*/32'hfffff800, /*is_branch=*/1'b0, /*pc_data=*/32'd0);
+
+    gpr[21] = 32'hfffff800;
+
+    #1;
+
+    // sltiu x22, x21, -2048
+    check_data(/*instr=*/32'h800abb13, /*reg_write=*/1'b1, /*reg_write_addr=*/5'd22, /*reg_write_data=*/32'd0, /*alu_data1=*/32'hfffff800, /*alu_data2=*/32'hfffff800, /*is_branch=*/1'b0, /*pc_data=*/32'd0);
+
+    gpr[21] = 32'hfffff801;
+
+    #1;
+
+    // sltiu x22, x21, -2048
+    check_data(/*instr=*/32'h800abb13, /*reg_write=*/1'b1, /*reg_write_addr=*/5'd22, /*reg_write_data=*/32'd0, /*alu_data1=*/32'hfffff801, /*alu_data2=*/32'hfffff800, /*is_branch=*/1'b0, /*pc_data=*/32'd0);
+
+    // sltiu x22, x0, 1
+    check_data(/*instr=*/32'h00103b13, /*reg_write=*/1'b1, /*reg_write_addr=*/5'd22, /*reg_write_data=*/32'd1, /*alu_data1=*/32'h00000000, /*alu_data2=*/32'h00000001, /*is_branch=*/1'b0, /*pc_data=*/32'd0);
+
+    gpr[21] = 32'h00000000;
+
+    #1;
+
+    // sltiu x0, x21, 1
+    check_data(/*instr=*/32'h001ab013, /*reg_write=*/1'b1, /*reg_write_addr=*/5'd0, /*reg_write_data=*/32'd1, /*alu_data1=*/32'h00000000, /*alu_data2=*/32'h00000001, /*is_branch=*/1'b0, /*pc_data=*/32'd0);
+
+    gpr[21] = 32'h00000003;
+
+    #1;
+
+    // sltiu x21, x21, 4
+    check_data(/*instr=*/32'h004aba93, /*reg_write=*/1'b1, /*reg_write_addr=*/5'd21, /*reg_write_data=*/32'd1, /*alu_data1=*/32'h00000003, /*alu_data2=*/32'h00000004, /*is_branch=*/1'b0, /*pc_data=*/32'd0);
+
     $finish;
   end
 
