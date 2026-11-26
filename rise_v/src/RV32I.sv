@@ -8,6 +8,7 @@ module RV32I(
   output logic [31:0] mem_addr,
   output logic [31:0] mem_write_data,
   input  logic [31:0] mem_read_data,
+  input  logic        mem_ready,
   output logic        mem_read,
   output logic        mem_write,
   output logic [3:0]  mem_byte_enable
@@ -144,10 +145,13 @@ module RV32I(
             else $fatal(1, "Misaligned memory access: 0x%0h", mem_addr);
       end
 
-      if (reg_write && reg_write_addr != 0 && mem_aligned)
-        gpr[reg_write_addr] <= reg_write_data;
+      // Keep the instruction and its request stable until RAM completes it.
+      if (!(mem_read_request || mem_write_request) || mem_ready) begin
+        if (reg_write && reg_write_addr != 0 && mem_aligned)
+          gpr[reg_write_addr] <= reg_write_data;
 
-      pc <= next_pc;
+        pc <= next_pc;
+      end
     end
   end
 

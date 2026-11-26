@@ -16,3 +16,4 @@
 test/blink_pnr.json
 /test
 /rise_v/src/gowin_rpll
+/rise_v/src/sdram_rpll
