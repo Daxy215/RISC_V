@@ -9,3 +9,10 @@
 *.kicad_pcb
 /riscv-cpu
 *.lck
+/rise_v/.idea
+/rise_v/impl
+*.gprj
+*.user
+test/blink_pnr.json
+/test
+/rise_v/src/gowin_rpll

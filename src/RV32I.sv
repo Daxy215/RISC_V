@@ -10,7 +10,7 @@ module RV32I(
   input  logic [31:0] mem_read_data,
   output logic        mem_read,
   output logic        mem_write,
-  output logic [3:0]   mem_byte_enable
+  output logic [3:0]  mem_byte_enable
 );
 
   import types_pkg::*;

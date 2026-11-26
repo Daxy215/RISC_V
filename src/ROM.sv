@@ -14,7 +14,13 @@ module ROM
 
   initial begin
     $display("Loading rom.");
-    $readmemh(ROM_FILE, memory, 0, ROM_SIZE - 1);
+    //$readmemh(ROM_FILE, memory, 0, ROM_SIZE - 1);
+
+    memory[0] = 32'h00500093;
+    memory[1] = 32'h00a00113;
+    memory[2] = 32'h002081b3;
+    memory[3] = 32'h40110233;
+    memory[4] = 32'h0000006f;
   end
 
   // >> 2 for alignment
